@@ -1,0 +1,63 @@
+﻿<Window x:Class="adayasundara_RD_A03.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:adayasundara_RD_A03"
+        xmlns:viewmodels="clr-namespace:adayasundara_RD_A03.ViewModels"
+        xmlns:views="clr-namespace:adayasundara_RD_A03.Views"
+        mc:Ignorable="d"
+        Title="Wally's POS" Height="600" Width="1080" WindowStartupLocation="CenterScreen" WindowState="Maximized" Background="White">
+
+    <Window.DataContext>
+        <local:WindowViewModel/>
+    </Window.DataContext>
+    
+    <Grid UseLayoutRounding="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2.8"/>
+            <ColumnDefinition Width="247.6"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1.5*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Background="DimGray" Grid.ColumnSpan="2" Margin="0,0,0,0">
+            <Grid Height="200" Background="Gray">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Margin="5,10,0,0" FontSize="24" Foreground="White" FontWeight="Bold" TextDecorations="Underline">Branch:</TextBlock>
+                    <ComboBox x:Name="branches" SelectionChanged="branches_SelectionChanged" VerticalContentAlignment="Center" Height="50" FontStretch="Expanded" FontSize="20" FontWeight="Bold" Loaded="branches_Loaded"></ComboBox>
+                    <TextBlock Margin="5,10,0,0" FontSize="24" Foreground="White" FontWeight="Bold" TextDecorations="Underline">Customer:</TextBlock>
+                    <ComboBox x:Name="customers"   VerticalContentAlignment="Center"  Height="50" FontStretch="Expanded" FontSize="20" FontWeight="Bold"></ComboBox>
+                </StackPanel>
+            </Grid>
+            <Button x:Name="Orders" Content="Order" Margin="0,0,0,5" Command="{Binding LoadOrderCommand}" Foreground="White" FontWeight="Bold" FontSize="30" Background="Transparent" ClipToBounds="True" SnapsToDevicePixels="True"/>
+            <Button x:Name="Products" Content="Products" Margin="0,0,0,5" BorderThickness="0" Background="Transparent" Foreground="White" FontWeight="Bold" FontSize="30" ClipToBounds="True" SnapsToDevicePixels="True"/>
+            <Button x:Name="btnCustomer" Content="Customer Info" Margin="0,0,0,5" Command="{Binding LoadCustomerCommand}" Foreground="White" FontWeight="Bold" FontSize="30" BorderThickness="0" Background="Transparent" ClipToBounds="True" SnapsToDevicePixels="True"/>
+            <Button x:Name="Checkout" Content="New Customer" Margin="0,0,0,5" Foreground="White" FontWeight="Bold" FontSize="30" BorderThickness="0" Background="Transparent" ClipToBounds="True" SnapsToDevicePixels="True"/>
+        </StackPanel>
+        
+        <ContentControl Grid.Column="2" Grid.ColumnSpan="1" Content="{Binding ThisView}"/>
+        
+        <StackPanel Grid.Column="3" Grid.ColumnSpan="1">
+            <StackPanel>
+                <TextBlock Margin="10,0,0,0" FontSize="24" FontWeight="Bold" TextDecorations="Underline">Cart: </TextBlock>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Stretch">
+                <ListView>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Product" Width="Auto"  />
+                            <GridViewColumn Header="Quantity" Width="Auto"  />
+                            <GridViewColumn Header="Price per Unit" Width="Auto"  />
+                            <GridViewColumn Header="Total Price" Width="auto"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
