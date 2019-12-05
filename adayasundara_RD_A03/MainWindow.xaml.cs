@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -35,7 +36,7 @@ namespace adayasundara_RD_A03
         public MainWindow()
         {
             InitializeComponent();
-            CartUtility.AddToCarts = new List<AddToCart>(); 
+            CartUtility.AddToCarts = new ObservableCollection<AddToCart>(); 
         }
 
         private void branches_Loaded(object sender, RoutedEventArgs e)

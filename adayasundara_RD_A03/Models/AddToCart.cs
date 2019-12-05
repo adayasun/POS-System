@@ -1,4 +1,5 @@
-﻿using System;
+﻿using adayasundara_RD_A03.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace adayasundara_RD_A03.Models
 {
-    public class AddToCart
+    public class AddToCart : ObservableObject
     {
         public AddToCart(int SKU, string name, decimal sPrice, int quantity, string prodType)
         {

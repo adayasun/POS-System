@@ -38,7 +38,17 @@ namespace adayasundara_RD_A03
             get { return _customerVM; }
             set { OnPropertyChanged(ref _customerVM, value); }
         }
-        
+        // ------------- Product Information Page ------------ //
+
+        public ICommand LoadProductCommand { get; private set; }
+
+        private ProductViewModel _productVM;
+
+        public ProductViewModel ProductVM
+        {
+            get { return _productVM; }
+            set { OnPropertyChanged(ref _productVM, value); }
+        }
         // ------------- Window Preparation ----------------//
         public WindowViewModel()
         {
@@ -47,6 +57,9 @@ namespace adayasundara_RD_A03
 
             CustomerVM = new CustomerViewModel();
             LoadCustomerCommand = new BoundingCommand(LoadCustomer);
+
+            ProductVM = new ProductViewModel();
+            LoadProductCommand = new BoundingCommand(LoadProduct);
         }
 
         private void LoadOrder()
@@ -57,6 +70,11 @@ namespace adayasundara_RD_A03
         private void LoadCustomer()
         {
             ThisView = CustomerVM;
+        }
+
+        private void LoadProduct()
+        {
+            ThisView = ProductVM;
         }
     }
 }
