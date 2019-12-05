@@ -75,12 +75,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\AddToCart.cs" />
     <Compile Include="Models\Branch.cs" />
     <Compile Include="Models\BranchToCustomer.cs" />
     <Compile Include="Models\BranchToProduct.cs" />
-    <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\CustomerInfo.cs" />
     <Compile Include="Models\ProductList.cs" />
     <Compile Include="Utilities\BoundingCommand.cs" />
+    <Compile Include="Utilities\CartUtility.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="ViewModels\CustomerViewModel.cs" />
     <Compile Include="ViewModels\OrdersViewModel.cs" />

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:adayasundara_RD_A03"
         xmlns:viewmodels="clr-namespace:adayasundara_RD_A03.ViewModels"
+        xmlns:utility="clr-namespace:adayasundara_RD_A03.Models"
         xmlns:views="clr-namespace:adayasundara_RD_A03.Views"
         mc:Ignorable="d"
         Title="Wally's POS" Height="600" Width="1080" WindowStartupLocation="CenterScreen" WindowState="Maximized" Background="White">
@@ -26,23 +27,46 @@
                     <TextBlock Margin="5,10,0,0" FontSize="24" Foreground="White" FontWeight="Bold" TextDecorations="Underline">Branch:</TextBlock>
                     <ComboBox x:Name="branches" SelectionChanged="branches_SelectionChanged" VerticalContentAlignment="Center" Height="50" FontStretch="Expanded" FontSize="20" FontWeight="Bold" Loaded="branches_Loaded"></ComboBox>
                     <TextBlock Margin="5,10,0,0" FontSize="24" Foreground="White" FontWeight="Bold" TextDecorations="Underline">Customer:</TextBlock>
-                    <ComboBox x:Name="customers"   VerticalContentAlignment="Center"  Height="50" FontStretch="Expanded" FontSize="20" FontWeight="Bold"></ComboBox>
+                    <ComboBox x:Name="customers" SelectionChanged="customers_SelectionChanged"  VerticalContentAlignment="Center"  Height="50" FontStretch="Expanded" FontSize="20" FontWeight="Bold"></ComboBox>
                 </StackPanel>
             </Grid>
             <Button x:Name="Orders" Content="Order" Margin="0,0,0,5" Command="{Binding LoadOrderCommand}" Foreground="White" FontWeight="Bold" FontSize="30" Background="Transparent" ClipToBounds="True" SnapsToDevicePixels="True"/>
-            <Button x:Name="Products" Content="Products" Margin="0,0,0,5" BorderThickness="0" Background="Transparent" Foreground="White" FontWeight="Bold" FontSize="30" ClipToBounds="True" SnapsToDevicePixels="True"/>
+            <Button x:Name="Products" Content="View Products" Margin="0,0,0,5" BorderThickness="0" Background="Transparent" Foreground="White" FontWeight="Bold" FontSize="30" ClipToBounds="True" SnapsToDevicePixels="True"/>
             <Button x:Name="btnCustomer" Content="Customer Info" Margin="0,0,0,5" Command="{Binding LoadCustomerCommand}" Foreground="White" FontWeight="Bold" FontSize="30" BorderThickness="0" Background="Transparent" ClipToBounds="True" SnapsToDevicePixels="True"/>
             <Button x:Name="Checkout" Content="New Customer" Margin="0,0,0,5" Foreground="White" FontWeight="Bold" FontSize="30" BorderThickness="0" Background="Transparent" ClipToBounds="True" SnapsToDevicePixels="True"/>
         </StackPanel>
         
         <ContentControl Grid.Column="2" Grid.ColumnSpan="1" Content="{Binding ThisView}"/>
         
-        <StackPanel Grid.Column="3" Grid.ColumnSpan="1">
+        <StackPanel Grid.Column="3" Grid.ColumnSpan="1" >
             <StackPanel>
                 <TextBlock Margin="10,0,0,0" FontSize="24" FontWeight="Bold" TextDecorations="Underline">Cart: </TextBlock>
             </StackPanel>
             <StackPanel HorizontalAlignment="Stretch">
-                <ListView>
+                <ListView x:Name="cart">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Product" Width="Auto" DisplayMemberBinding="{Binding name}"/>
+                            <GridViewColumn Header="Quantity" Width="Auto" DisplayMemberBinding="{Binding quantity}"/>
+                            <GridViewColumn Header="Price" Width="Auto" DisplayMemberBinding="{Binding sPrice}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </StackPanel>
+            <StackPanel VerticalAlignment="Bottom">
+                <Button Content="Checkout" Click="Button_Click"></Button>
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</Window>
+
+<!--<ListView>
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -56,8 +80,4 @@
                             <GridViewColumn Header="Total Price" Width="auto"/>
                         </GridView>
                     </ListView.View>
-                </ListView>
-            </StackPanel>
-        </StackPanel>
-    </Grid>
-</Window>
+                </ListView>-->

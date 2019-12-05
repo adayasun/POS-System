@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using adayasundara_RD_A03.Models;
+using adayasundara_RD_A03.Utilities;
 using adayasundara_RD_A03.ViewModels;
 using MySql.Data.MySqlClient;
 
@@ -27,13 +28,14 @@ namespace adayasundara_RD_A03
     {
         readonly string connectionString = ConfigurationManager.ConnectionStrings["adwally"].ConnectionString;
         List<Branch> branch = new List<Branch>();
-        List<Customer> customer = new List<Customer>();
+        List<CustomerInfo> customer = new List<CustomerInfo>();
         List<BranchToCustomer> linkBranchCust = new List<BranchToCustomer>();
         List<BranchToProduct> linkBranchProd = new List<BranchToProduct>();
         List<ProductList> products = new List<ProductList>();
         public MainWindow()
         {
             InitializeComponent();
+            CartUtility.AddToCarts = new List<AddToCart>(); 
         }
 
         private void branches_Loaded(object sender, RoutedEventArgs e)
@@ -79,7 +81,7 @@ namespace adayasundara_RD_A03
                     while (datareader.Read())
                     {
                         //customers.Items.Add(datareader["FName" + "LName"]);
-                        customer.Add(new Customer()
+                        customer.Add(new CustomerInfo()
                         {
                             custID = ((int)datareader["Cust_ID"]),
                             fName = datareader["FName"] as string,
@@ -88,7 +90,7 @@ namespace adayasundara_RD_A03
                         });
                     }
                     connection.Close();
-                    Customer.customers = customer;
+                    CustomerInfo.customers = customer;
                 }
                 catch (Exception ex)
                 {
@@ -161,7 +163,6 @@ namespace adayasundara_RD_A03
                     MySqlDataReader datareader = createCommand.ExecuteReader();
                     while (datareader.Read())
                     {
-                        //customers.Items.Add(datareader["FName" + "LName"]);
                         products.Add(new ProductList()
                         {
                             SKU = ((int)datareader["SKU"]),
@@ -185,7 +186,7 @@ namespace adayasundara_RD_A03
 
         private string[] GetCustomerById(int id)
         {
-            return Customer.customers.Where(line => line.custID == id).Select(l => (l.fName + " " + l.lName)).ToArray();
+            return CustomerInfo.customers.Where(line => line.custID == id).Select(l => (l.fName + " " + l.lName)).ToArray();
         }
         private int[] GetBranchToCustId(int id)
         {
@@ -207,5 +208,33 @@ namespace adayasundara_RD_A03
             }
            
         }
+
+        private int DbCustomerId(string name)
+        {
+            return CustomerInfo.customers.Where(line => line.fName == name).Select(l => l.custID).Sum();
+        }
+        private void customers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string name = customers.SelectedValue.ToString();
+            string fName = name.Substring(0, name.IndexOf(' '));
+            CustomerInfo.ChosenCustomer = DbCustomerId(fName);
+        }
+
+        public void ShowData()
+        {
+            cart.ItemsSource = null;
+            cart.ItemsSource = CartUtility.AddToCarts;
+        }
+
+        private void cart_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            ShowData();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 }
