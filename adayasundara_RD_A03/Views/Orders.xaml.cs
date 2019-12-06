@@ -139,8 +139,8 @@ namespace adayasundara_RD_A03.Views
                 {
                     connection.Open();
                     //INSERT INTO ORDER
-                    string query = $@"INSERT INTO orders(Cust_ID, OrderDate, PaymentStatus)
-                                        VALUES('{currentCustomer}','{dateTime}','{status}')";
+                    string query = $@"INSERT INTO orders(Cust_ID, OrderDate)
+                                        VALUES('{currentCustomer}','{dateTime}')";
 
                     MySqlCommand createCommand = new MySqlCommand(query, connection);
                     createCommand.ExecuteNonQuery();
@@ -179,11 +179,11 @@ namespace adayasundara_RD_A03.Views
                         decimal price = decimal.Parse(row[2].ToString());
                         decimal extended = price * quantity;
                         int adjustedInv = insertStock - quantity;
-
+                        string paid = "PAID";
                         connection.Open();
                         //INSERT ORDER_ID, Price, Quantity, extended INTO ORDERLINE
-                        string query = $@"INSERT INTO order_line(Order_ID, sPrice, Quantity, Extended_Price)
-                                          VALUES ('{orderId}','{price}','{quantity}','{extended}');";
+                        string query = $@"INSERT INTO order_line(Order_ID, sPrice, Quantity, Extended_Price, PaymentStatus)
+                                          VALUES ('{orderId}','{price}','{quantity}','{extended}', '{paid}');";
 
                         MySqlCommand createCommand = new MySqlCommand(query, connection);
                         createCommand.ExecuteNonQuery();

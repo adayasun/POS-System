@@ -16,5 +16,7 @@ namespace adayasundara_RD_A03.Models
         public string fName { get; set; }
         public string lName { get; set; }
         public string phoneNumber { get; set; }
+
+
     }
 }

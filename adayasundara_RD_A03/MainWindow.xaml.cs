@@ -81,7 +81,6 @@ namespace adayasundara_RD_A03
                     MySqlDataReader datareader = createCommand.ExecuteReader();
                     while (datareader.Read())
                     {
-                        //customers.Items.Add(datareader["FName" + "LName"]);
                         customer.Add(new CustomerInfo()
                         {
                             custID = ((int)datareader["Cust_ID"]),
@@ -110,7 +109,6 @@ namespace adayasundara_RD_A03
                     MySqlDataReader datareader = createCommand.ExecuteReader();
                     while (datareader.Read())
                     {
-                        //customers.Items.Add(datareader["FName" + "LName"]);
                         linkBranchCust.Add(new BranchToCustomer()
                         {
                             lCustId = ((int)datareader["Cust_ID"]),
@@ -195,8 +193,10 @@ namespace adayasundara_RD_A03
         }
         private void branches_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            string branchName = null;
+
             customers.Items.Clear();
-            string branchName = branches.SelectedValue.ToString();
+            branchName = branches.SelectedValue.ToString();
             int bId = (branches.SelectedIndex) + 1;
             Branch.ChosenBranchID = bId;
             foreach(int id in GetBranchToCustId(bId))
@@ -216,9 +216,17 @@ namespace adayasundara_RD_A03
         }
         private void customers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string name = customers.SelectedValue.ToString();
-            string fName = name.Substring(0, name.IndexOf(' '));
-            CustomerInfo.ChosenCustomer = DbCustomerId(fName);
+            try
+            {
+                string name = customers.SelectedValue.ToString();
+                string fName = name.Substring(0, name.IndexOf(' '));
+                CustomerInfo.ChosenCustomer = DbCustomerId(fName);
+
+            }
+            catch(Exception ex)
+            {
+                //MessageBox.Show(ex.Message);
+            }
         }
 
     }
