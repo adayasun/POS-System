@@ -1,4 +1,16 @@
-﻿using MySql.Data.MySqlClient;
+﻿/*
+*	FILE			:	Customer.xaml.cs
+*	PROJECT			:	PROG2111 - Relational Databases
+*	PROGRAMMER		:	Amy Dayasundara
+*	FIRST VERSION	:	2019 - 11 - 30
+*	DESCRIPTION		:	
+*	                    This manages the customer information for adding a new customer,
+*	                    looking at currently selected customer information and adding 
+*	                    current customer to branch.
+*/
+
+#region Systems
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,6 +28,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
 using adayasundara_RD_A03.Models;
+#endregion Systems
 
 namespace adayasundara_RD_A03.Views
 {
@@ -52,18 +65,24 @@ namespace adayasundara_RD_A03.Views
                     string customer = CustomerInfo.ChosenCustomer.ToString();
                     connection.Open();
                     string query = $@"SELECT 
-                                            o.Order_ID as 'Order ID', 
+                                            o.Order_ID as 'Order ID',
                                             p.Product_Name as 'Product Name',
                                             p.ProdType as 'Product Type',
-                                            ol.Quantity as 'Quantity', 
-                                            o.OrderDate as 'Order Date', 
-                                            ol.PaymentStatus as 'Payment Status' 
-                                    FROM order_line as ol 
-                                        join orderline_prod as op on op.Order_Line_ID = ol.Order_Line_ID 
-                                        join products as p on p.SKU = op.SKU 
-                                        join orders as o on ol.Order_ID = o.Order_ID 
-                                        join customer as c on c.Cust_ID = o.Cust_ID 
-                                    WHERE c.Cust_ID = '{customer}'; ";
+                                            o.OrderDate as 'Order Date',
+                                            ol.Quantity as 'Quantity',
+                                            ol.PaymentStatus as 'Payment Status'
+                                        FROM
+                                            order_line AS ol
+                                                JOIN
+                                            orderline_prod AS op ON op.Order_Line_ID = ol.Order_Line_ID
+                                                JOIN
+                                            products AS p ON p.SKU = op.SKU
+                                                JOIN
+                                            orders AS o ON ol.Order_ID = o.Order_ID
+                                                JOIN
+                                            customer AS c ON c.Cust_ID = o.Cust_ID
+                                        WHERE
+                                            c.Cust_ID = '{customer}'; ";
 
 
                     MySqlCommand createCommand = new MySqlCommand(query, connection);
@@ -95,8 +114,8 @@ namespace adayasundara_RD_A03.Views
             //OrderId 0
             //Product Name 1
             //Product Type 2
-            //Quantity 3
-            //Date 4
+            //Quantity 4
+            //Date 3
             //Payment Status 5
 
 
@@ -116,7 +135,7 @@ namespace adayasundara_RD_A03.Views
 
                     int orderId = Int32.Parse(information.Row.ItemArray[0].ToString());
                     string prodName = information.Row.ItemArray[1].ToString();
-                    int quantity = Int32.Parse(information.Row.ItemArray[3].ToString());
+                    int quantity = Int32.Parse(information.Row.ItemArray[4].ToString());
                     string prodType = information.Row.ItemArray[2].ToString();
 
                     connection.Open();
@@ -159,8 +178,6 @@ namespace adayasundara_RD_A03.Views
                     MessageBox.Show(ex.Message);
                 }
             }
-
-
         }
 
         private void btnNewCust_Click(object sender, RoutedEventArgs e)

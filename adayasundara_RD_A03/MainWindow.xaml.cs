@@ -1,4 +1,15 @@
-﻿using System;
+﻿/*
+*	FILE			:	MainWindow.xaml.cs
+*	PROJECT			:	PROG2111 - Relational Databases
+*	PROGRAMMER		:	Amy Dayasundara
+*	FIRST VERSION	:	2019 - 11 - 30
+*	DESCRIPTION		:	
+*	                    This has the code behind for the controls of the main window.
+*	                    It will also load the appropriate tables for each of the required 
+*	                    models.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;

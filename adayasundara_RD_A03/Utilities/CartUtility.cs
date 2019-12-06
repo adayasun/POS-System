@@ -1,4 +1,13 @@
-﻿using adayasundara_RD_A03.Models;
+﻿/*
+*	FILE			:	CartUtility.cs
+*	PROJECT			:	PROG2111 - Relational Databases
+*	PROGRAMMER		:	Amy Dayasundara
+*	FIRST VERSION	:	2019 - 11 - 30
+*	DESCRIPTION		:	
+*	                    Stores the information of the carts information
+*/
+#region Systems
+using adayasundara_RD_A03.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+#endregion Systems
 
 namespace adayasundara_RD_A03.Utilities
 {
@@ -14,6 +24,10 @@ namespace adayasundara_RD_A03.Utilities
     {
         public static ObservableCollection<AddToCart> AddToCarts { get; set; }
         public static DataTable cartItems { get; set; }
+
+        /// <summary>
+        ///     Export the information of the cart
+        /// </summary>
         public static void StartExport()
         {
             try

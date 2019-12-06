@@ -1,10 +1,22 @@
-﻿using System;
+﻿/*
+*	FILE			:	ObervableObjects.cs
+*	PROJECT			:	PROG2111 - Relational Databases
+*	PROGRAMMER		:	Amy Dayasundara
+*	FIRST VERSION	:	2019 - 11 - 30
+*	DESCRIPTION		:	
+*	                    This class is taken from a youtube video which assists in the client
+*	                    property changes
+*/
+
+#region Systems
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+#endregion Systems
 
 namespace adayasundara_RD_A03.Utilities
 {

@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+*	FILE			:	BranchToCustomer.cs
+*	PROJECT			:	PROG2111 - Relational Databases
+*	PROGRAMMER		:	Amy Dayasundara
+*	FIRST VERSION	:	2019 - 11 - 30
+*	DESCRIPTION		:	
+*	                    Retains the associatives of the Branch to customer.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

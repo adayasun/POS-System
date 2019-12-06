@@ -1,4 +1,14 @@
-﻿using adayasundara_RD_A03.Models;
+﻿/*
+*	FILE			:	Orders.xaml.cs
+*	PROJECT			:	PROG2111 - Relational Databases
+*	PROGRAMMER		:	Amy Dayasundara
+*	FIRST VERSION	:	2019 - 11 - 30
+*	DESCRIPTION		:	
+*	                    This manages the orders behind the code. It implements the orders 
+*	                    being processed into the database.
+*/
+#region Systems
+using adayasundara_RD_A03.Models;
 using adayasundara_RD_A03.Utilities;
 using MySql.Data.MySqlClient;
 using System;
@@ -18,6 +28,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+#endregion Systems
 
 namespace adayasundara_RD_A03.Views
 {

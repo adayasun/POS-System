@@ -1,4 +1,13 @@
-﻿using adayasundara_RD_A03.Utilities;
+﻿/*
+*	FILE			:	WindowViewModel.cs
+*	PROJECT			:	PROG2111 - Relational Databases
+*	PROGRAMMER		:	Amy Dayasundara
+*	FIRST VERSION	:	2019 - 11 - 30
+*	DESCRIPTION		:	
+*	                    This controls the views for each of the window types.
+*/
+
+using adayasundara_RD_A03.Utilities;
 using adayasundara_RD_A03.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -20,6 +29,7 @@ namespace adayasundara_RD_A03
         }
 
         // --------------- Orders Page ------------------- //
+        //Bound to button click for load order page
         public ICommand LoadOrderCommand { get; private set; }
         //Property of the Order View saved
         private OrdersViewModel _ordersVM;
@@ -29,6 +39,7 @@ namespace adayasundara_RD_A03
             set { OnPropertyChanged(ref _ordersVM, value); }
         }
         // --------------- Customer Page ----------------- //
+        //Bound to Customer page to button to load the user control
         public ICommand LoadCustomerCommand { get; private set; }
         //Property of the Customer View available
         private CustomerViewModel _customerVM;
@@ -39,7 +50,7 @@ namespace adayasundara_RD_A03
             set { OnPropertyChanged(ref _customerVM, value); }
         }
         // ------------- Product Information Page ------------ //
-
+        //Bound to Load page to button to load the user control
         public ICommand LoadProductCommand { get; private set; }
 
         private ProductViewModel _productVM;
@@ -50,6 +61,9 @@ namespace adayasundara_RD_A03
             set { OnPropertyChanged(ref _productVM, value); }
         }
         // ------------- Window Preparation ----------------//
+        /// <summary>
+        /// Load a new page for each of the view types
+        /// </summary>
         public WindowViewModel()
         {
             OrdersVM = new OrdersViewModel();
@@ -62,16 +76,23 @@ namespace adayasundara_RD_A03
             LoadProductCommand = new BoundingCommand(LoadProduct);
         }
 
+        /// <summary>
+        /// Set the current content view to the Order user control
+        /// </summary>
         private void LoadOrder()
         {
             ThisView = OrdersVM;
         }
-
+        /// <summary>
+        /// Set the current content view to the Customer user control
+        /// </summary>
         private void LoadCustomer()
         {
             ThisView = CustomerVM;
         }
-
+        /// <summary>
+        /// Set the current content view to the Product user control
+        /// </summary>
         private void LoadProduct()
         {
             ThisView = ProductVM;
