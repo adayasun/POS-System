@@ -17,13 +17,30 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
         <StackPanel Grid.Column="0">
-            <TextBlock Text="View Customer Order History" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10"  FontSize="20" FontWeight="Bold"></TextBlock>
-            <DataGrid x:Name="ordersInfo"  Margin="10" Loaded="ordersInfo_Loaded" AutoGenerateColumns="True" />
+            <TextBlock Text="View Customer Order History" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10"  FontSize="20" FontWeight="Bold" TextDecorations="Underline"></TextBlock>
+            <DataGrid x:Name="ordersInfo" Width="Auto" AlternatingRowBackground="LightGray" CanUserAddRows="False" CanUserDeleteRows="False" Margin="10" Loaded="ordersInfo_Loaded" AutoGenerateColumns="True" />
+            <Button x:Name="btnRefund" Margin="10,0,10,0" Click="btnRefund_Click" Content="Refund"/>
         </StackPanel>
-        <StackPanel Grid.Column="1">
-            <TextBlock Text="Input new customer:" FontSize="20" Margin="10" FontWeight="Bold" Grid.Column="1" />
-        </StackPanel>
+        <StackPanel Grid.Column="1" Margin="5,0,0,0">
+            <TextBlock Text="Input new customer to current branch:" FontSize="20" Margin="0,0,0,5" FontWeight="Bold" Grid.Column="1" TextDecorations="Underline" />
+            <TextBlock Text="First Name: "/>
+            <TextBox Width="100" HorizontalAlignment="Left"/>
+            
+            <TextBlock Text="Last Name:"/>
+            <TextBox Width="100" HorizontalAlignment="Left"/>
 
+            <TextBlock Text="Phone Number:"/>
+            <TextBox Width="100" HorizontalAlignment="Left"/>
+            <Button x:Name="btnNewCust" Margin="0,5,0,0" Content="Add New Customer" Click="btnNewCust_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="1" Margin="5,0,0,0">
+            <TextBlock Text="Add Existing Customer to new branch:" FontSize="20" Margin="0,0,0,5" FontWeight="Bold" TextDecorations="Underline"/>
+            <ComboBox x:Name="cmbBranches"/>
+        </StackPanel>
     </Grid>
 </UserControl>

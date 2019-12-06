@@ -97,7 +97,11 @@ namespace adayasundara_RD_A03.Views
             insertQuantity = Int32.Parse(selectedQuantity.Text); //Check Quantity
             availableQty = Int32.Parse(quantity.Text);
 
-            if(insertQuantity <= availableQty)
+            if(dateSelected.SelectedDate == null)
+            {
+                MessageBox.Show("Please select a date");
+            }
+            else if(insertQuantity <= availableQty)
             {
                 insertName = productsAvailable.SelectedItem.ToString();
                 insertSku = ProductList.products.Where(line => line.prodName == insertName).Select(l => l.SKU).Sum();
@@ -183,7 +187,6 @@ namespace adayasundara_RD_A03.Views
 
                         MySqlCommand createCommand = new MySqlCommand(query, connection);
                         createCommand.ExecuteNonQuery();
-
                         //RETRIEVE ORDERLINE_ID where ORDER_ID, Price, Quantity, extended
                         query = $@"SELECT * FROM order_line
                                    WHERE Order_ID = '{orderId}' 
@@ -196,7 +199,9 @@ namespace adayasundara_RD_A03.Views
                         {
                             orderLineId = ((int)datareader["Order_Line_ID"]);
                         }
+                        connection.Close();
 
+                        connection.Open();
                         //ORDERLINE_ID TO SKU
                         query = $@"INSERT INTO orderline_prod(Order_Line_ID, SKU)
                                     VALUES('{orderLineId}','{insertSku}');";
@@ -220,7 +225,7 @@ namespace adayasundara_RD_A03.Views
                 
             }
 
-            cartList.Items.Clear();
+            cartList.ItemsSource = null;
         }
 
     }

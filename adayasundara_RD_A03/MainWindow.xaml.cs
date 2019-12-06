@@ -221,20 +221,5 @@ namespace adayasundara_RD_A03
             CustomerInfo.ChosenCustomer = DbCustomerId(fName);
         }
 
-        public void ShowData()
-        {
-            //cart.ItemsSource = null;
-            //cart.ItemsSource = CartUtility.AddToCarts;
-        }
-
-        private void cart_LoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            ShowData();
-        }
-
-        private void updateCart_Loaded(object sender, RoutedEventArgs e)
-        {
-            //updateCart.ItemsSource = CartUtility.cartItems.DefaultView;
-        }
     }
 }
