@@ -99,24 +99,25 @@ namespace adayasundara_RD_A03.Views
             //Payment Status 5
 
 
-            string refund = "RFND";
-            string today = DateTime.Now.ToString("yyyy-mm-dd");
-            var rowView = ordersInfo.SelectedItem;
-            int SKU = 0;
-            int prodQuant = 0;
-            int updatedQuant = 0;
-            int currentCustomer = CustomerInfo.ChosenCustomer;
-
-            DataRowView information = (DataRowView)rowView;
-
-            int orderId = Int32.Parse(information.Row.ItemArray[0].ToString());
-            string prodName = information.Row.ItemArray[1].ToString();
-            int quantity = Int32.Parse(information.Row.ItemArray[3].ToString());
-            string prodType = information.Row.ItemArray[2].ToString();
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
                 {
+                    string refund = "RFND";
+                    string today = DateTime.Now.ToString("yyyy-mm-dd");
+                    var rowView = ordersInfo.SelectedItem;
+                    int SKU = 0;
+                    int prodQuant = 0;
+                    int updatedQuant = 0;
+                    int currentCustomer = CustomerInfo.ChosenCustomer;
+
+                    DataRowView information = (DataRowView)rowView;
+
+                    int orderId = Int32.Parse(information.Row.ItemArray[0].ToString());
+                    string prodName = information.Row.ItemArray[1].ToString();
+                    int quantity = Int32.Parse(information.Row.ItemArray[3].ToString());
+                    string prodType = information.Row.ItemArray[2].ToString();
+
                     connection.Open();
                     //Get SKU number
                     string query = $@"SELECT * 

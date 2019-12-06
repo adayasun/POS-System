@@ -31,11 +31,11 @@
             <TextBlock x:Name="quantity" Margin="5,5,0,0" FontSize="24" Width="Auto" FontWeight="Bold"></TextBlock>
 
             <TextBlock Margin="5,10,0,0" FontSize="24" Width="Auto" FontWeight="Bold" TextDecorations="Underline">Select Quantity:</TextBlock>
-            <TextBox x:Name="selectedQuantity" FontSize="24" VerticalContentAlignment="Center" Margin="5,5,0,0" Width="100" Height="50" HorizontalAlignment="Left"></TextBox>
+            <TextBox x:Name="selectedQuantity" FontSize="24" Width="100" Height="50" VerticalContentAlignment="Center" Margin="5,5,0,0"  HorizontalAlignment="Left"></TextBox>
         </StackPanel>
         <Calendar x:Name="dateSelected" Grid.Column="0" HorizontalAlignment="Right" Margin="0,5,5,0" />
         <StackPanel Grid.Column="0" VerticalAlignment="Bottom">
-            <Button Content="Add to cart" Margin="5" Height="50" Click="Button_Click" FontSize="25" FontWeight="Bold"></Button>
+            <Button Content="Add to cart" Margin="5,0,5,10" Height="50" Click="Button_Click" FontSize="25" FontWeight="Bold"></Button>
         </StackPanel>
 
         <StackPanel Grid.Column="1">
@@ -43,7 +43,7 @@
         </StackPanel>
         
         <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
-            <Button x:Name="checkout" Click="checkout_Click" Content="Checkout" Margin="5" Height="50" FontSize="25" FontWeight="Bold"/>
+            <Button x:Name="checkout" Click="checkout_Click" Content="Checkout" Margin="5,0,5,10" Height="50" FontSize="25" FontWeight="Bold"/>
         </StackPanel>
     </Grid>
 </UserControl>
