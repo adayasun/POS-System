@@ -94,10 +94,17 @@ namespace adayasundara_RD_A03.Views
             decimal wPrice = 0;
             double markUp = 1.40;
 
-            insertQuantity = Int32.Parse(selectedQuantity.Text); //Check Quantity
-            availableQty = Int32.Parse(quantity.Text);
+            try
+            {
+                insertQuantity = Int32.Parse(selectedQuantity.Text); //Check Quantity
+                availableQty = Int32.Parse(quantity.Text);
+            }
+            catch(Exception ex)
+            {
 
-            if(dateSelected.SelectedDate == null)
+            }
+
+            if (dateSelected.SelectedDate == null)
             {
                 MessageBox.Show("Please select a date");
             }

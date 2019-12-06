@@ -21,9 +21,9 @@
             <RowDefinition Height="2*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Column="0">
+        <StackPanel Grid.Column="0" Grid.RowSpan="2">
             <TextBlock Text="View Customer Order History" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10"  FontSize="20" FontWeight="Bold" TextDecorations="Underline"></TextBlock>
-            <DataGrid x:Name="ordersInfo" Width="Auto" FontSize="13" AlternatingRowBackground="LightGray" CanUserAddRows="False" CanUserDeleteRows="False" Margin="10" Loaded="ordersInfo_Loaded" AutoGenerateColumns="True" />
+            <DataGrid x:Name="ordersInfo" Width="Auto" FontSize="13" Height="500" AlternatingRowBackground="LightGray" CanUserAddRows="False" CanUserDeleteRows="False" Margin="10" Loaded="ordersInfo_Loaded" AutoGenerateColumns="True" />
             <Button x:Name="btnRefund" Margin="10,0,10,0" Click="btnRefund_Click" Content="Refund" Height="50" FontSize="25" FontWeight="Bold"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Margin="5,0,0,0">
@@ -40,7 +40,7 @@
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="1" Margin="5,0,0,0">
             <TextBlock Text="Add Existing Customer to new branch:" FontSize="20" Margin="0,0,0,5" FontWeight="Bold" TextDecorations="Underline"/>
-            <ComboBox x:Name="cmbBranches" Width="Auto" Loaded="cmbBranches_Loaded" Margin="0,0,5,0" />
+            <ComboBox x:Name="cmbBranches" Width="Auto" Height="50" FontSize="20" Loaded="cmbBranches_Loaded" Margin="0,0,5,0" />
             <Button x:Name="btnNewBranch" Click="btnNewBranch_Click" Content="New Branch to Customer" Margin="0,5,5,0" Width="Auto" Height="50" FontSize="25" FontWeight="Bold"/>
         </StackPanel>
     </Grid>

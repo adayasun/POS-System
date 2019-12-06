@@ -35,6 +35,7 @@ namespace adayasundara_RD_A03.Views
 
         private void ordersInfo_Loaded(object sender, RoutedEventArgs e)
         {
+            cmbBranches.Items.Clear();
             UpdateTable();
         }
 
