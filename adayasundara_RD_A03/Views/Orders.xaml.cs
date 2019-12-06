@@ -1,7 +1,11 @@
 ﻿using adayasundara_RD_A03.Models;
 using adayasundara_RD_A03.Utilities;
+using MySql.Data.MySqlClient;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +26,8 @@ namespace adayasundara_RD_A03.Views
     /// </summary>
     public partial class Orders : UserControl
     {
+        readonly string connectionString = ConfigurationManager.ConnectionStrings["adwally"].ConnectionString;
+
         public Orders()
         {
             InitializeComponent();
@@ -68,22 +74,19 @@ namespace adayasundara_RD_A03.Views
             sPrice = wPrice * (decimal)markUp;
             price.Text = sPrice.ToString("0.00");
 
-            //Setup Product Type CHECK WHY IT DOES THAT ENUM BITCH THING
-            productType = ProductList.products.Where(line => line.prodName == product).Select(l => l.prodType).ToString();
+            //Setup Product Type
+            productType = ProductList.products.Where(line => line.prodName == product).Select(l => l.prodType).First();
             pType.Text = productType.ToString();
             //Setup available quantity
             aQuantity = ProductList.products.Where(line => line.prodName == product).Select(l => l.stock).Sum();
             quantity.Text = aQuantity.ToString();
         }
 
-        private void selectedQuantity_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         public void Button_Click(object sender, RoutedEventArgs e)
         {
             int insertSku = 0;
+            int availableQty = 0;
             string insertName = null;
             decimal insertSPrice = 0;
             int insertQuantity = 0;
@@ -91,23 +94,134 @@ namespace adayasundara_RD_A03.Views
             decimal wPrice = 0;
             double markUp = 1.40;
 
-            insertName = productsAvailable.SelectedItem.ToString();
-            insertSku = ProductList.products.Where(line => line.prodName == insertName).Select(l => l.SKU).Sum();
-            wPrice = ProductList.products.Where(line => line.prodName == insertName).Select(l => l.wPrice).Sum();
-            insertSPrice = wPrice * (decimal)markUp;
-            insertQuantity = Int32.Parse(selectedQuantity.Text);
-            insertProdType = ProductList.products.Where(line => line.prodName == insertName).Select(l => l.prodType).ToString();
+            insertQuantity = Int32.Parse(selectedQuantity.Text); //Check Quantity
+            availableQty = Int32.Parse(quantity.Text);
 
-            AddToCart newItem = new AddToCart(insertSku, insertName, insertSPrice, insertQuantity, insertProdType);
-            CartUtility.AddToCarts.Add(newItem);
+            if(insertQuantity <= availableQty)
+            {
+                insertName = productsAvailable.SelectedItem.ToString();
+                insertSku = ProductList.products.Where(line => line.prodName == insertName).Select(l => l.SKU).Sum();
+                wPrice = ProductList.products.Where(line => line.prodName == insertName).Select(l => l.wPrice).Sum();
+                insertSPrice = wPrice * (decimal)markUp;
+                insertProdType = ProductList.products.Where(line => line.prodName == insertName).Select(l => l.prodType).First();
 
-            
-            ClearQuantity();
-        }
+                AddToCart newItem = new AddToCart(insertSku, insertName, insertSPrice, insertQuantity, insertProdType);
+                CartUtility.AddToCarts.Add(newItem);
 
-        private void ClearQuantity()
-        {
+                CartUtility.StartExport();
+                
+                cartList.ItemsSource = CartUtility.cartItems.DefaultView;
+            }
+            else
+            {
+                MessageBox.Show("Please enter an quantity less than or equal to the available quantity.");
+            }
             selectedQuantity.Text = "";
         }
+
+        private void checkout_Click(object sender, RoutedEventArgs e)
+        {
+            int currentCustomer = CustomerInfo.ChosenCustomer;
+            string dateTime = dateSelected.SelectedDate.Value.ToString("yyyy-MM-dd");
+
+            string status = "PAID";
+
+            //Needed variable
+            int orderId = 0;
+            int orderLineId = 0;
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    //INSERT INTO ORDER
+                    string query = $@"INSERT INTO orders(Cust_ID, OrderDate, PaymentStatus)
+                                        VALUES('{currentCustomer}','{dateTime}','{status}')";
+
+                    MySqlCommand createCommand = new MySqlCommand(query, connection);
+                    createCommand.ExecuteNonQuery();
+
+                    //RETIREVE ORDER_ID
+
+                    query = $@"SELECT * 
+                                    FROM orders 
+                                    WHERE Cust_ID = '{currentCustomer}'
+                                    AND OrderDate ='{dateTime}';";
+                    createCommand = new MySqlCommand(query, connection);
+                    MySqlDataReader datareader = createCommand.ExecuteReader();
+                    while (datareader.Read())
+                    {
+                        orderId = ((int)datareader["Order_ID"]);
+                    }
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+            foreach (DataRowView row in cartList.ItemsSource)
+            {
+                int insertSku = ProductList.products.Where(line => line.prodName == (row[0].ToString())).Select(l => l.SKU).Sum();
+                int insertStock = ProductList.products.Where(line => line.prodName == (row[0].ToString())).Select(l => l.stock).Sum();
+
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    try
+                    {
+                        //Retireve values
+                        int quantity = Int32.Parse(row[1].ToString());
+                        decimal price = decimal.Parse(row[2].ToString());
+                        decimal extended = price * quantity;
+                        int adjustedInv = insertStock - quantity;
+
+                        connection.Open();
+                        //INSERT ORDER_ID, Price, Quantity, extended INTO ORDERLINE
+                        string query = $@"INSERT INTO order_line(Order_ID, sPrice, Quantity, Extended_Price)
+                                          VALUES ('{orderId}','{price}','{quantity}','{extended}');";
+
+                        MySqlCommand createCommand = new MySqlCommand(query, connection);
+                        createCommand.ExecuteNonQuery();
+
+                        //RETRIEVE ORDERLINE_ID where ORDER_ID, Price, Quantity, extended
+                        query = $@"SELECT * FROM order_line
+                                   WHERE Order_ID = '{orderId}' 
+                                   AND sPrice = '{price}'
+                                   AND Quantity = '{quantity}'
+                                   AND Extended_Price= '{extended}';";
+                        createCommand = new MySqlCommand(query, connection);
+                        MySqlDataReader datareader = createCommand.ExecuteReader();
+                        while (datareader.Read())
+                        {
+                            orderLineId = ((int)datareader["Order_Line_ID"]);
+                        }
+
+                        //ORDERLINE_ID TO SKU
+                        query = $@"INSERT INTO orderline_prod(Order_Line_ID, SKU)
+                                    VALUES('{orderLineId}','{insertSku}');";
+                        createCommand = new MySqlCommand(query, connection);
+                        createCommand.ExecuteNonQuery();
+
+                        //ADJUST PRODUCT QTY
+                        query = $@"UPDATE products 
+                                    SET Stock = '{adjustedInv}'
+                                    WHERE SKU ='{insertSku}';";
+                        createCommand = new MySqlCommand(query, connection);
+                        createCommand.ExecuteNonQuery();
+
+                        connection.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+                
+            }
+
+            cartList.Items.Clear();
+        }
+
     }
 }

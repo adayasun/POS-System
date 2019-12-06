@@ -223,8 +223,8 @@ namespace adayasundara_RD_A03
 
         public void ShowData()
         {
-            cart.ItemsSource = null;
-            cart.ItemsSource = CartUtility.AddToCarts;
+            //cart.ItemsSource = null;
+            //cart.ItemsSource = CartUtility.AddToCarts;
         }
 
         private void cart_LoadingRow(object sender, DataGridRowEventArgs e)
@@ -232,10 +232,9 @@ namespace adayasundara_RD_A03
             ShowData();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void updateCart_Loaded(object sender, RoutedEventArgs e)
         {
-
+            //updateCart.ItemsSource = CartUtility.cartItems.DefaultView;
         }
-
     }
 }

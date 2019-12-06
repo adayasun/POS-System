@@ -35,14 +35,14 @@
             <Button x:Name="btnCustomer" Content="Customer" Margin="0,0,0,5" Command="{Binding LoadCustomerCommand}" Foreground="White" FontWeight="Bold" FontSize="30" BorderThickness="0" Background="Transparent" ClipToBounds="True" SnapsToDevicePixels="True"/>
         </StackPanel>
         
-        <ContentControl Grid.Column="2" Grid.ColumnSpan="1" Content="{Binding ThisView}"/>
+        <ContentControl Grid.Column="2" Grid.ColumnSpan="2" Content="{Binding ThisView}"/>
         
-        <StackPanel Grid.Column="3" Grid.ColumnSpan="1" >
+        <!--<StackPanel Grid.Column="3" Grid.ColumnSpan="1" >
             <StackPanel>
                 <TextBlock Margin="10,0,0,0" FontSize="24" FontWeight="Bold" TextDecorations="Underline">Cart: </TextBlock>
             </StackPanel>
-            <Grid HorizontalAlignment="Stretch" Height="400">
-                <ListView x:Name="cart" ItemsSource="{Binding AddToCarts.AddToCarts}">
+            <Grid HorizontalAlignment="Stretch" Height="400" >
+                <ListView x:Name="cart" ItemsSource="{Binding AddToCarts}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -50,18 +50,18 @@
                     </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Product" Width="Auto" DisplayMemberBinding="{Binding name}"/>
-                            <GridViewColumn Header="Quantity" Width="Auto" DisplayMemberBinding="{Binding quantity}"/>
-                            <GridViewColumn Header="Price" Width="Auto" DisplayMemberBinding="{Binding sPrice}"/>
+                            <GridViewColumn Width="Auto" DisplayMemberBinding ="{Binding name}" />
+                            <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding quantity}"/>
+                            <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding sPrice}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
             </Grid>
-            <!--<Grid VerticalAlignment="Bottom">
+            --><!--<Grid VerticalAlignment="Bottom">
                 <Button Content="Checkout" Click="Button_Click"></Button>
-            </Grid>-->
+            </Grid>--><!--
 
-        </StackPanel>
+        </StackPanel>-->
     </Grid>
 </Window>
 

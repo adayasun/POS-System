@@ -7,13 +7,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                 <GradientStop Color="Black" Offset="1"/>
                 <GradientStop Color="#FFF73F3F" Offset="0.502"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <StackPanel>
+        <StackPanel Grid.Column="0">
             <TextBlock Margin="5,10,0,0" FontSize="24" Width="Auto" FontWeight="Bold" TextDecorations="Underline">Product:</TextBlock>
             <ComboBox x:Name="productsAvailable"  FontSize="20" FontWeight="Bold" VerticalContentAlignment="Center" SelectionChanged="productsAvailable_SelectionChanged" Loaded="productsAvailable_Loaded" Margin="10,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="50" Width="Auto" IsEditable="True"/>
             
@@ -27,10 +31,19 @@
             <TextBlock x:Name="quantity" Margin="5,5,0,0" FontSize="24" Width="Auto" FontWeight="Bold"></TextBlock>
 
             <TextBlock Margin="5,10,0,0" FontSize="24" Width="Auto" FontWeight="Bold" TextDecorations="Underline">Select Quantity:</TextBlock>
-            <TextBox x:Name="selectedQuantity" FontSize="24" VerticalContentAlignment="Center" SelectionChanged="selectedQuantity_SelectionChanged" Margin="5,5,0,0" Width="100" Height="50" HorizontalAlignment="Left"></TextBox>
+            <TextBox x:Name="selectedQuantity" FontSize="24" VerticalContentAlignment="Center" Margin="5,5,0,0" Width="100" Height="50" HorizontalAlignment="Left"></TextBox>
         </StackPanel>
-        <StackPanel VerticalAlignment="Bottom">
-            <Button Content="Add to cart" Height="50" Click="Button_Click" FontSize="25" FontWeight="Bold"></Button>
+        <Calendar x:Name="dateSelected" Grid.Column="0" HorizontalAlignment="Right" Margin="0,5,5,0" />
+        <StackPanel Grid.Column="0" VerticalAlignment="Bottom">
+            <Button Content="Add to cart" Margin="5" Height="50" Click="Button_Click" FontSize="25" FontWeight="Bold"></Button>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+            <DataGrid x:Name="cartList" AlternatingRowBackground="LightGray" CanUserAddRows="False" FontSize="25"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
+            <Button x:Name="checkout" Click="checkout_Click" Content="Checkout" Margin="5" Height="50" FontSize="25" FontWeight="Bold"/>
         </StackPanel>
     </Grid>
 </UserControl>
