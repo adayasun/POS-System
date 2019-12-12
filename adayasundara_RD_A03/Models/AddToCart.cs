@@ -17,6 +17,12 @@ using System.Threading.Tasks;
 
 namespace adayasundara_RD_A03.Models
 {
+    /*
+    * NAME: AddToCart 
+    * 
+    * PURPOSE: Add to the cart section to be later used
+    * 
+    */
     public class AddToCart : ObservableObject
     {
         /// <summary>
@@ -39,7 +45,7 @@ namespace adayasundara_RD_A03.Models
         public string prodType { get; set; }
 
         /// <summary>
-        ///     Sets the cart list
+        ///     Sets the cart list 
         /// </summary>
         /// <param name="setSKU"></param>
         /// <param name="setName"></param>

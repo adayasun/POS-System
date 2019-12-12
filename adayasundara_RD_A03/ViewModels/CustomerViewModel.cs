@@ -18,6 +18,13 @@ using System.Threading.Tasks;
 
 namespace adayasundara_RD_A03.ViewModels
 {
+    /*
+    * NAME: Customer View Model
+    * 
+    * PURPOSE: Controls the view for the customer tab
+    * 
+    */
+
     public class CustomerViewModel : ObservableObject
     {
         private CustomerViewModel _customerVModel;

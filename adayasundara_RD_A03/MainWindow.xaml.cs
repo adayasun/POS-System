@@ -9,6 +9,7 @@
 *	                    models.
 */
 
+#region System
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,19 +30,22 @@ using adayasundara_RD_A03.Models;
 using adayasundara_RD_A03.Utilities;
 using adayasundara_RD_A03.ViewModels;
 using MySql.Data.MySqlClient;
-
+#endregion System
 
 namespace adayasundara_RD_A03
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    /*
+     * NAME: Main Window 
+     * 
+     * PURPOSE: To generate the table information for the code
+     * 
+     */
     public partial class MainWindow : Window
     {
         readonly string connectionString = ConfigurationManager.ConnectionStrings["adwally"].ConnectionString;
         List<Branch> branch = new List<Branch>();
         List<CustomerInfo> customer = new List<CustomerInfo>();
-        List<BranchToCustomer> linkBranchCust = new List<BranchToCustomer>();
+        List<DontNeed> linkBranchCust = new List<DontNeed>();
         List<BranchToProduct> linkBranchProd = new List<BranchToProduct>();
         List<ProductList> products = new List<ProductList>();
         public MainWindow()
@@ -77,11 +81,11 @@ namespace adayasundara_RD_A03
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.Message + "MainWindow, Branch loaded");
                 }
             }
 
-            //Retrieve Customer information (Dependant on Branch)
+            //Retrieve Customer information (Independent)
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
@@ -92,6 +96,7 @@ namespace adayasundara_RD_A03
                     MySqlDataReader datareader = createCommand.ExecuteReader();
                     while (datareader.Read())
                     {
+
                         customer.Add(new CustomerInfo()
                         {
                             custID = ((int)datareader["Cust_ID"]),
@@ -99,41 +104,47 @@ namespace adayasundara_RD_A03
                             lName = datareader["LName"] as string,
                             phoneNumber = datareader["phoneNumber"] as string
                         });
+
+                        string first = datareader["FName"] as string;
+                        string last = datareader["LName"] as string;
+                        string fAndL = first + " " + last;
+                        customers.Items.Add(fAndL);
+
                     }
                     connection.Close();
                     CustomerInfo.customers = customer;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.Message + "MainWindow: Customer");
                 }
             }
 
             //Retrieve Associative table to match branch to customer
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    string customerQuery = "SELECT * FROM branch_cust";
-                    MySqlCommand createCommand = new MySqlCommand(customerQuery, connection);
-                    MySqlDataReader datareader = createCommand.ExecuteReader();
-                    while (datareader.Read())
-                    {
-                        linkBranchCust.Add(new BranchToCustomer()
-                        {
-                            lCustId = ((int)datareader["Cust_ID"]),
-                            lBranchId=((int)datareader["Branch_ID"])                            
-                        });
-                    }
-                    connection.Close();
-                    BranchToCustomer.branchToCustomers = linkBranchCust;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
+            //using (MySqlConnection connection = new MySqlConnection(connectionString))
+            //{
+            //    try
+            //    {
+            //        connection.Open();
+            //        string customerQuery = "SELECT * FROM branch_cust";
+            //        MySqlCommand createCommand = new MySqlCommand(customerQuery, connection);
+            //        MySqlDataReader datareader = createCommand.ExecuteReader();
+            //        while (datareader.Read())
+            //        {
+            //            linkBranchCust.Add(new BranchToCustomer()
+            //            {
+            //                lCustId = ((int)datareader["Cust_ID"]),
+            //                lBranchId=((int)datareader["Branch_ID"])                            
+            //            });
+            //        }
+            //        connection.Close();
+            //        BranchToCustomer.branchToCustomers = linkBranchCust;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show(ex.Message);
+            //    }
+            //}
 
             //Retrieve Associative table for products
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -194,37 +205,39 @@ namespace adayasundara_RD_A03
 
         }
 
-        private string[] GetCustomerById(int id)
-        {
-            return CustomerInfo.customers.Where(line => line.custID == id).Select(l => (l.fName + " " + l.lName)).ToArray();
-        }
-        private int[] GetBranchToCustId(int id)
-        {
-            return BranchToCustomer.branchToCustomers.Where(line => line.lBranchId == id).Select(l => (l.lCustId)).ToArray();
-        }
+        //private string[] GetCustomerById(int id)
+        //{
+        //    return CustomerInfo.customers.Where(line => line.custID == id).Select(l => (l.fName + " " + l.lName)).ToArray();
+        //}
+
+        //private int[] GetBranchToCustId(int id)
+        //{
+        //    return DontNeed.branchToCustomers.Where(line => line.lBranchId == id).Select(l => (l.lCustId)).ToArray();
+        //}
+
         private void branches_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string branchName = null;
 
-            customers.Items.Clear();
+            //customers.Items.Clear();
             branchName = branches.SelectedValue.ToString();
             int bId = (branches.SelectedIndex) + 1;
             Branch.ChosenBranchID = bId;
-            foreach(int id in GetBranchToCustId(bId))
-            {
-                //string name = GetCustomerById(id);
-                foreach(string name in GetCustomerById(id))
-                {
-                    this.customers.Items.Add(name);
-                }
-            }
-           
+            //foreach (int id in GetBranchToCustId(bId))
+            //{
+            //    //string name = GetCustomerById(id);
+            //    foreach (string name in GetCustomerById(id))
+            //    {
+            //        this.customers.Items.Add(name);
+            //    }
+            //}
         }
 
         private int DbCustomerId(string name)
         {
             return CustomerInfo.customers.Where(line => line.fName == name).Select(l => l.custID).Sum();
         }
+
         private void customers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try

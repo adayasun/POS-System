@@ -16,6 +16,13 @@ using System.Threading.Tasks;
 
 namespace adayasundara_RD_A03.Models
 {
+    /*
+     * NAME: Branch To Product
+     * 
+     * PURPOSE: Products available per each branch
+     * 
+     */
+
     public class BranchToProduct
     {
         public static List<BranchToProduct> branchToProducts { get; set; }

@@ -32,12 +32,16 @@ using System.Windows.Shapes;
 
 namespace adayasundara_RD_A03.Views
 {
-    /// <summary>
-    /// Interaction logic for Orders.xaml
-    /// </summary>
+    /*
+     * NAME: Orders 
+     * 
+     * PURPOSE: Behind code for order creation
+     * 
+     */
     public partial class Orders : UserControl
     {
         readonly string connectionString = ConfigurationManager.ConnectionStrings["adwally"].ConnectionString;
+        List<ProductList> products = new List<ProductList>();
 
         public Orders()
         {
@@ -90,7 +94,7 @@ namespace adayasundara_RD_A03.Views
             pType.Text = productType.ToString();
             //Setup available quantity
             aQuantity = ProductList.products.Where(line => line.prodName == product).Select(l => l.stock).Sum();
-            quantity.Text = aQuantity.ToString();
+            showQuantity.Text = aQuantity.ToString();
         }
 
 
@@ -104,22 +108,23 @@ namespace adayasundara_RD_A03.Views
             string insertProdType = null;
             decimal wPrice = 0;
             double markUp = 1.40;
-
+            string prodType = null;
+            int noQuantity = 0;
             try
             {
                 insertQuantity = Int32.Parse(selectedQuantity.Text); //Check Quantity
-                availableQty = Int32.Parse(quantity.Text);
+                availableQty = Int32.Parse(showQuantity.Text);
             }
             catch(Exception ex)
             {
-
+                MessageBox.Show(ex.ToString());
             }
 
             if (dateSelected.SelectedDate == null)
             {
                 MessageBox.Show("Please select a date");
             }
-            else if(insertQuantity <= availableQty)
+            else if(insertQuantity <= availableQty || insertQuantity >= noQuantity)
             {
                 insertName = productsAvailable.SelectedItem.ToString();
                 insertSku = ProductList.products.Where(line => line.prodName == insertName).Select(l => l.SKU).Sum();
@@ -144,21 +149,30 @@ namespace adayasundara_RD_A03.Views
         private void checkout_Click(object sender, RoutedEventArgs e)
         {
             int currentCustomer = CustomerInfo.ChosenCustomer;
+            int currentBranch = Branch.ChosenBranchID;
             string dateTime = dateSelected.SelectedDate.Value.ToString("yyyy-MM-dd");
-
+            string purchased;
             string status = "PAID";
+            string totalPurchaseLine = "\n";
+            string stringOrderId = null;
+            decimal subtotal = 0;
+            string stringSubtotal = null;
+            string stringWithHST = null;
+            string stringWithSalesTotal = null;
 
             //Needed variable
             int orderId = 0;
             int orderLineId = 0;
+
+            //USING 1
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
                     //INSERT INTO ORDER
-                    string query = $@"INSERT INTO orders(Cust_ID, OrderDate)
-                                        VALUES('{currentCustomer}','{dateTime}')";
+                    string query = $@"INSERT INTO orders(Cust_ID, Branch_ID, OrderDate)
+                                        VALUES('{currentCustomer}','{currentBranch}','{dateTime}')";
 
                     MySqlCommand createCommand = new MySqlCommand(query, connection);
                     createCommand.ExecuteNonQuery();
@@ -176,10 +190,11 @@ namespace adayasundara_RD_A03.Views
                         orderId = ((int)datareader["Order_ID"]);
                     }
                     connection.Close();
+                    stringOrderId = orderId.ToString();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.Message + "using 1");
                 }
             }
 
@@ -188,23 +203,46 @@ namespace adayasundara_RD_A03.Views
                 int insertSku = ProductList.products.Where(line => line.prodName == (row[0].ToString())).Select(l => l.SKU).Sum();
                 int insertStock = ProductList.products.Where(line => line.prodName == (row[0].ToString())).Select(l => l.stock).Sum();
 
+                string stringProductName = null;
+                string stringProdType = null;
+                string stringQuantity = null;
+                string stringSPrice = null;
+                string stringFinalPrice = null;
+
+                stringProductName = row[0].ToString();
+                stringProdType = row[1].ToString();
+                stringQuantity = row[2].ToString();
+                stringSPrice = row[3].ToString();
+
+                int quantity = Int32.Parse(row[2].ToString());
+                decimal price = decimal.Parse(row[3].ToString());
+                decimal extended = price * quantity;
+                stringFinalPrice = extended.ToString();
+
+                totalPurchaseLine += stringProductName + " (" + stringProdType +") " + stringQuantity + " x $" + stringSPrice + " = $" + stringFinalPrice + "\n";
+                subtotal += price;
+                //USING 2
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     try
                     {
                         //Retireve values
-                        int quantity = Int32.Parse(row[1].ToString());
-                        decimal price = decimal.Parse(row[2].ToString());
-                        decimal extended = price * quantity;
+                        //int quantity = Int32.Parse(row[2].ToString());
+                        //decimal price = decimal.Parse(row[3].ToString());
+                        //decimal extended = price * quantity;
+                        //stringFinalPrice = extended.ToString();
                         int adjustedInv = insertStock - quantity;
                         string paid = "PAID";
                         connection.Open();
+                        string query = null;
+
                         //INSERT ORDER_ID, Price, Quantity, extended INTO ORDERLINE
-                        string query = $@"INSERT INTO order_line(Order_ID, sPrice, Quantity, Extended_Price, PaymentStatus)
+                        query = $@"INSERT INTO order_line(Order_ID, sPrice, Quantity, Extended_Price, PaymentStatus)
                                           VALUES ('{orderId}','{price}','{quantity}','{extended}', '{paid}');";
 
                         MySqlCommand createCommand = new MySqlCommand(query, connection);
                         createCommand.ExecuteNonQuery();
+
                         //RETRIEVE ORDERLINE_ID where ORDER_ID, Price, Quantity, extended
                         query = $@"SELECT * FROM order_line
                                    WHERE Order_ID = '{orderId}' 
@@ -225,6 +263,9 @@ namespace adayasundara_RD_A03.Views
                                     VALUES('{orderLineId}','{insertSku}');";
                         createCommand = new MySqlCommand(query, connection);
                         createCommand.ExecuteNonQuery();
+                        connection.Close();
+
+                        connection.Open();
 
                         //ADJUST PRODUCT QTY
                         query = $@"UPDATE products 
@@ -233,18 +274,133 @@ namespace adayasundara_RD_A03.Views
                         createCommand = new MySqlCommand(query, connection);
                         createCommand.ExecuteNonQuery();
 
+
                         connection.Close();
+                        showQuantity.Text = "";
+                        showQuantity.Text = adjustedInv.ToString();
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message);
+                        //MessageBox.Show(ex);
                     }
                 }
-                
-            }
 
+            }
+            decimal withHST = subtotal * 0.13M;
+            decimal salesTotal = subtotal + withHST;
+            stringWithHST = withHST.ToString();
+            stringWithSalesTotal = salesTotal.ToString();
+            stringSubtotal = subtotal.ToString();
+
+            UpdateProductList();
+            ShowReciept(orderId, totalPurchaseLine, stringOrderId, stringWithSalesTotal, stringWithHST, stringSubtotal);
             cartList.ItemsSource = null;
         }
 
+        private void ShowReciept(int orderId, string totalPurchaseLine, string stringOrderId, string stringWithSalesTotal, string stringWithHST, string stringSubtotal)
+        {
+            string customerName = null;
+            string fName = null;
+            string lName = null;
+            string orderIdstr = orderId.ToString();
+            string branchName = null;
+            int branchId = Branch.ChosenBranchID;
+            int customerId = CustomerInfo.ChosenCustomer;
+            string date = dateSelected.ToString();
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = $@"SELECT * FROM branch WHERE Branch_ID = '{branchId}';";
+                    MySqlCommand createCommand = new MySqlCommand(query, connection);
+                    MySqlDataReader datareader = createCommand.ExecuteReader();
+                    while (datareader.Read())
+                    {
+                        branchName = datareader["Branch_Name"] as string;
+                    }
+
+                    connection.Close();
+
+                    connection.Open();
+                    query = $@"SELECT * FROM customer WHERE Cust_ID = '{customerId}';";
+                    createCommand = new MySqlCommand(query, connection);
+                    datareader = createCommand.ExecuteReader();
+
+                    while (datareader.Read())
+                    {
+                        fName = datareader["FName"] as string;
+                        lName = datareader["LName"] as string;
+                    }
+                    customerName = fName + " " + lName;
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+            //Need Date
+            //List of purchased items
+            //Subtotal
+            //HST
+            //Sales total
+
+            MessageBox.Show("************************" + "\n" + 
+                "Thank you for shopping at" + "\n" + 
+                "Wally's World " + $"{ branchName}" + "\n" + 
+                "On " + date + $" {customerName}" + "\n" + 
+                "Order ID: " + stringOrderId + "\n" + 
+                totalPurchaseLine + "\n" +
+                "Subtotal = $" + stringSubtotal + "\n" +
+                "HST (13%) = $" + stringWithHST + "\n" +
+                "Sale Total = $" + stringWithSalesTotal + "\n" +
+                 "\n" + "Paid - Thank you!");
+        }
+
+        private void UpdateProductList()
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string customerQuery = "SELECT * FROM products";
+                    MySqlCommand createCommand = new MySqlCommand(customerQuery, connection);
+                    MySqlDataReader datareader = createCommand.ExecuteReader();
+                    while (datareader.Read())
+                    {
+                        products.Add(new ProductList()
+                        {
+                            SKU = ((int)datareader["SKU"]),
+                            prodName = datareader["Product_Name"] as string,
+                            wPrice = ((decimal)datareader["wPrice"]),
+                            stock = ((int)datareader["Stock"]),
+                            prodType = datareader["ProdType"] as string
+                        });
+
+                    }
+                    connection.Close();
+
+                    ProductList.products = products;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+            int branchId = Branch.ChosenBranchID;
+
+            foreach (int id in GetBranchToProdId(branchId))
+            {
+                foreach (string name in GetProductById(id))
+                {
+                    productsAvailable.Items.Add(name);
+                }
+            }
+
+        }
     }
 }

@@ -16,9 +16,16 @@ using System.Threading.Tasks;
 namespace adayasundara_RD_A03.Models
 {
     [Serializable]
-    class BranchToCustomer
+    /*
+     * NAME: BranchToCustomer 
+     * 
+     * PURPOSE: ...Don't need anymore
+     * 
+     */
+
+    class DontNeed
     {
-        public static List<BranchToCustomer> branchToCustomers { get; set; }
+        public static List<DontNeed> branchToCustomers { get; set; }
         public int lCustId { get; set; }
         public int lBranchId { get; set; }
     }

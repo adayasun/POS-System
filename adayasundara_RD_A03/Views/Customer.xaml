@@ -28,20 +28,15 @@
         </StackPanel>
         <StackPanel Grid.Column="1" Margin="5,0,0,0">
             <TextBlock Text="Input new customer to current branch:" FontSize="20" Margin="0,0,0,5" FontWeight="Bold" Grid.Column="1" TextDecorations="Underline" />
-            <TextBlock  Text="First Name: " FontSize="20"/>
-            <TextBox x:Name="txtFirst" HorizontalAlignment="Left" FontSize="24" Width="150" Height="25" />
+            <TextBlock  Text="First Name: "  FontSize="20"/>
+            <TextBox x:Name="txtFirst"  HorizontalAlignment="Left" FontSize="24" Width="150" Height="30" />
 
             <TextBlock  Text="Last Name:" FontSize="20"/>
-            <TextBox x:Name="txtLast" Width="150" HorizontalAlignment="Left" FontSize="24" Height="25" />
+            <TextBox x:Name="txtLast" Width="150" HorizontalAlignment="Left" FontSize="24" Height="30" />
 
             <TextBlock  Text="Phone Number:" FontSize="20"/>
-            <TextBox x:Name="txtPhone" Width="150" HorizontalAlignment="Left" FontSize="24" Height="25" />
+            <TextBox x:Name="txtPhone" Width="150" HorizontalAlignment="Left" FontSize="24" Height="30" />
             <Button x:Name="btnNewCust" Margin="0,5,5,0" Content="Add New Customer" Click="btnNewCust_Click" Height="50" FontSize="25" FontWeight="Bold"/>
-        </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="1" Margin="5,0,0,0">
-            <TextBlock Text="Add Existing Customer to new branch:" FontSize="20" Margin="0,0,0,5" FontWeight="Bold" TextDecorations="Underline"/>
-            <ComboBox x:Name="cmbBranches" Width="Auto" Height="50" FontSize="20" Loaded="cmbBranches_Loaded" Margin="0,0,5,0" />
-            <Button x:Name="btnNewBranch" Click="btnNewBranch_Click" Content="New Branch to Customer" Margin="0,5,5,0" Width="Auto" Height="50" FontSize="25" FontWeight="Bold"/>
         </StackPanel>
     </Grid>
 </UserControl>

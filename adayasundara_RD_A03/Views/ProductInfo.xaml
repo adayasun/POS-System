@@ -15,6 +15,6 @@
             </LinearGradientBrush>
         </Grid.Background>
         <TextBlock Text="View Current Branch Product Quantities" Margin="10" FontSize="20" FontWeight="Bold"/>
-        <DataGrid x:Name="productInfo" Loaded="productInfo_Loaded" AutoGenerateColumns="True" Margin="10" Height="400" Width="Auto"/>
+        <DataGrid x:Name="productInfo" Loaded="productInfo_Loaded" AutoGenerateColumns="True" HorizontalAlignment="Left" Margin="10" Height="400" Width="500"/>
     </Grid>
 </UserControl>

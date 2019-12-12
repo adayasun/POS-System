@@ -18,9 +18,12 @@ using System.Windows.Shapes;
 
 namespace adayasundara_RD_A03.Views
 {
-    /// <summary>
-    /// Interaction logic for ProductInfo.xaml
-    /// </summary>
+    /*
+     * NAME: Product Info 
+     * 
+     * PURPOSE: Code behind to control the product information
+     * 
+     */
     public partial class ProductInfo : UserControl
     {
         readonly string connectionString = ConfigurationManager.ConnectionStrings["adwally"].ConnectionString;

@@ -20,6 +20,13 @@ using System.Windows;
 
 namespace adayasundara_RD_A03.Utilities
 {
+    /*
+     * NAME: Cart Utility
+     * 
+     * PURPOSE: Manages the cart and updates the data information
+     * 
+     */
+
     public class CartUtility : ObservableObject
     {
         public static ObservableCollection<AddToCart> AddToCarts { get; set; }
@@ -39,6 +46,7 @@ namespace adayasundara_RD_A03.Utilities
                 // we assume that the properties of DataSourceVM are the columns of the table
                 // you can also provide the type via the second parameter
                 dataTable.Columns.Add("Product Name");
+                dataTable.Columns.Add("Product Type");
                 dataTable.Columns.Add("Quantity");
                 dataTable.Columns.Add("Price");
 
@@ -48,6 +56,7 @@ namespace adayasundara_RD_A03.Utilities
 
                     // fill the properties into the cells
                     newRow["Product Name"] = element.name;
+                    newRow["Product Type"] = element.prodType;
                     newRow["Quantity"] = element.quantity;
                     newRow["Price"] = element.sPrice;
                     dataTable.Rows.Add(newRow);

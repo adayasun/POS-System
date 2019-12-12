@@ -17,6 +17,12 @@ using System.Threading.Tasks;
 namespace adayasundara_RD_A03.Models
 {
     [Serializable]
+    /*
+     * NAME: Branch 
+     * 
+     * PURPOSE: Sets the current branches of the RD
+     * 
+     */
     public class Branch : ObservableObject
     {
         //Current Branch ID

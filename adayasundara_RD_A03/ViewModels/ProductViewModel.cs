@@ -18,11 +18,18 @@ using System.Threading.Tasks;
 
 namespace adayasundara_RD_A03.ViewModels
 {
+    /*
+     * NAME: Product View Model 
+     * 
+     * PURPOSE: Controls the view for the product
+     * 
+     */
+
     public class ProductViewModel : ObservableObject
     {
         private ProductViewModel _productVModel;
         /// <summary>
-        /// 
+        ///     Sustain product view model
         /// </summary>
         public ProductViewModel ProductVModel
         {
@@ -32,7 +39,7 @@ namespace adayasundara_RD_A03.ViewModels
 
         private object _thisView;
         /// <summary>
-        /// 
+        ///        Load the current view that is established by the ICommand 
         /// </summary>
         public object ThisView
         {

@@ -18,6 +18,13 @@ using System.Windows.Input;
 
 namespace adayasundara_RD_A03.Utilities
 {
+    /*
+     * NAME: Bounding command
+     * 
+     * PURPOSE: Bounds the values of the commands to set to execution
+     * 
+     */
+
     public class BoundingCommand<T> : ICommand
     {
         private readonly Action<T> _execute = null;
@@ -45,6 +52,13 @@ namespace adayasundara_RD_A03.Utilities
         public void Execute(object parameter) => _execute((T)parameter);
 
     }
+
+    /*
+     * NAME: Bounding Command
+     * 
+     * PURPOSE: Object for the command bounding which decides execution
+     * 
+     */
 
     public class BoundingCommand : BoundingCommand<object>
     {

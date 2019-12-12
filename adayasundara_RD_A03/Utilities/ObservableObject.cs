@@ -20,12 +20,19 @@ using System.Threading.Tasks;
 
 namespace adayasundara_RD_A03.Utilities
 {
+    /*
+     * NAME: ObservableObject
+     * 
+     * PURPOSE: Handles the events of the property changes for the view and view model
+     * 
+     */
+
     public class ObservableObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Raises an event to alert client to changed property value
+        ///     Raises an event to alert client to changed property value
         /// </summary>
         /// <param name="propertyName"></param> <b>string</b> - name of property which has been changed
         // referenced from https://www.youtube.com/watch?v=CQYvjlDoJ08&t=21s
@@ -35,7 +42,7 @@ namespace adayasundara_RD_A03.Utilities
         }
 
         /// <summary>
-        /// Raises an event to alert client to changed property value. Compares new value to old
+        ///     Raises an event to alert client to changed property value. Compares new value to old
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="backingField"></param> <b>ref T backingField</b> - field to change

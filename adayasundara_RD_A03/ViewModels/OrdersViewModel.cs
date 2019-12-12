@@ -17,6 +17,13 @@ using System.Threading.Tasks;
 
 namespace adayasundara_RD_A03.ViewModels
 {
+    /*
+     * NAME: Orders View Model 
+     * 
+     * PURPOSE: Controls the view for the orders
+     * 
+     */
+
     public class OrdersViewModel : ObservableObject
     {
         private OrdersViewModel _ordersVModel;

@@ -16,6 +16,13 @@ using System.Threading.Tasks;
 
 namespace adayasundara_RD_A03.Models
 {
+    /*
+    * NAME: Product List
+    * 
+    * PURPOSE: Retrieve and set the product list
+    * 
+    */
+
     public class ProductList
     {
         public static List<ProductList> products { get; set; }

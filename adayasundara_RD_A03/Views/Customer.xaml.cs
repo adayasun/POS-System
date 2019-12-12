@@ -33,9 +33,12 @@ using adayasundara_RD_A03.Models;
 namespace adayasundara_RD_A03.Views
 {
 
-    /// <summary>
-    /// Interaction logic for Customer.xaml
-    /// </summary>
+    /*
+     * NAME: Customer 
+     * 
+     * PURPOSE: Behind code for the customer to manage the customer creation
+     * 
+     */
     public partial class Customer : UserControl
     {
         readonly string connectionString = ConfigurationManager.ConnectionStrings["adwally"].ConnectionString;
@@ -46,9 +49,14 @@ namespace adayasundara_RD_A03.Views
             InitializeComponent();
         }
 
+        /// <summary>
+        ///        Load orders and update into table
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ordersInfo_Loaded(object sender, RoutedEventArgs e)
         {
-            cmbBranches.Items.Clear();
+            //cmbBranches.Items.Clear();
             UpdateTable();
         }
 
@@ -118,7 +126,6 @@ namespace adayasundara_RD_A03.Views
             //Date 3
             //Payment Status 5
 
-
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
@@ -130,7 +137,7 @@ namespace adayasundara_RD_A03.Views
                     int prodQuant = 0;
                     int updatedQuant = 0;
                     int currentCustomer = CustomerInfo.ChosenCustomer;
-
+                    int orderLineId = 0;
                     DataRowView information = (DataRowView)rowView;
 
                     int orderId = Int32.Parse(information.Row.ItemArray[0].ToString());
@@ -157,16 +164,41 @@ namespace adayasundara_RD_A03.Views
                     connection.Close();
 
                     connection.Open();
-                    //Update Product Quantity
+                    //Update Product Quantity  
+
                     query = $@"UPDATE products 
                                     SET Stock = '{updatedQuant}'
                                     WHERE SKU ='{SKU}';";
                     createCommand = new MySqlCommand(query, connection);
                     createCommand.ExecuteNonQuery();
+                    connection.Close();
 
+                    connection.Open();
                     //INSERT Paid to refund
                     query = $@"INSERT INTO order_line(Order_ID, Quantity, PaymentStatus)
                                           VALUES ('{orderId}','{quantity}', '{refund}');";
+                    createCommand = new MySqlCommand(query, connection);
+                    createCommand.ExecuteNonQuery();
+                    connection.Close();
+
+                    connection.Open();
+                    //Get new Orderline ID and associate with Product ID
+                    query = $@"Select * FROM order_line
+                                WHERE Order_ID = '{orderId}' AND
+                                      Quantity = '{quantity}' AND
+                                      PaymentStatus = '{refund}'";
+                    createCommand = new MySqlCommand(query, connection);
+                    datareader = createCommand.ExecuteReader();
+                    while(datareader.Read())
+                    {
+                        orderLineId = ((int)datareader["Order_Line_ID"]);
+                    }
+                    connection.Close();
+
+                    connection.Open();
+                    //Insert new association with prod
+                    query = $@"INSERT INTO orderline_prod(Order_Line_ID, SKU)
+                                VALUES('{orderLineId}','{SKU}');";
                     createCommand = new MySqlCommand(query, connection);
                     createCommand.ExecuteNonQuery();
 
@@ -180,6 +212,11 @@ namespace adayasundara_RD_A03.Views
             }
         }
 
+        /// <summary>
+        ///     Enter new customer into database - have to change this to one to many
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnNewCust_Click(object sender, RoutedEventArgs e)
         {
             string fName = txtFirst.Text.Trim();
@@ -222,21 +259,21 @@ namespace adayasundara_RD_A03.Views
                     }
                     connection.Close();
 
-                    connection.Open();
-                    //Insert into Branch to Customer (branch_cust)
-                    query = $@"INSERT INTO branch_cust(Cust_ID, Branch_ID)
-                                        VALUES('{custId}','{branchId}')";
+                    //connection.Open();
+                    ////Insert into Branch to Customer (branch_cust)
+                    //query = $@"INSERT INTO branch_cust(Cust_ID, Branch_ID)
+                    //                    VALUES('{custId}','{branchId}')";
 
-                    BranchToCustomer.branchToCustomers.Add(new BranchToCustomer()
-                    {
-                        lBranchId = branchId,
-                        lCustId = custId
-                    });
-                    createCommand = new MySqlCommand(query, connection);
-                    createCommand.ExecuteNonQuery();
+                    //DontNeed.branchToCustomers.Add(new DontNeed()
+                    //{
+                    //    lBranchId = branchId,
+                    //    lCustId = custId
+                    //});
+                    //createCommand = new MySqlCommand(query, connection);
+                    //createCommand.ExecuteNonQuery();
 
 
-                    connection.Close();
+                    //connection.Close();
                 }
                 catch (Exception ex)
                 {
@@ -249,71 +286,81 @@ namespace adayasundara_RD_A03.Views
         }
 
 
-        //COME BACK TO THIS
-        private void cmbBranches_Loaded(object sender, RoutedEventArgs e)
-        {
-            cmbBranches.Items.Clear();
-            cmbBranches.Text = "--- SELECT A BRANCH ---";
+        /// <summary>
+        ///     Choose a branches to load the customer to
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        //private void cmbBranches_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    cmbBranches.Items.Clear();
+        //    cmbBranches.Text = "--- SELECT A BRANCH ---";
 
-            int currentCustomer = CustomerInfo.ChosenCustomer;
-            int currentBranch = Branch.ChosenBranchID;
+        //    int currentCustomer = CustomerInfo.ChosenCustomer;
+        //    int currentBranch = Branch.ChosenBranchID;
 
-            //Search for branches customer that is not in
-            foreach(var branch in Branch.branches)
-            {
-                foreach(var branchCust in BranchToCustomer.branchToCustomers)
-                {
-                   if(branch.branchID != branchCust.lBranchId)
-                   {
-                        if(branchCust.lCustId != currentCustomer)
-                        {
-                            cmbBranches.Items.Add(branch.branchName);
-                        }
-                   }
-                }
-            }
-        }
+        //    //Search for branches customer that is not in
+        //    foreach(var branch in Branch.branches)
+        //    {
+        //        foreach(var branchCust in DontNeed.branchToCustomers)
+        //        {
+        //           if(branch.branchID != branchCust.lBranchId)
+        //           {
+        //                if(branchCust.lCustId != currentCustomer)
+        //                {
+        //                    cmbBranches.Items.Add(branch.branchName);
+        //                }
+        //           }
+        //        }
+        //    }
+        //}
 
-        private void btnNewBranch_Click(object sender, RoutedEventArgs e)
-        {
-            string branchName = cmbBranches.SelectedItem.ToString();
-            int currentCustomer = CustomerInfo.ChosenCustomer;
-            int branchId = 0;
-            foreach (var branch in Branch.branches)
-            {
-                if(branch.branchName == branchName)
-                {
-                    branchId = branch.branchID;
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        //private void btnNewBranch_Click(object sender, RoutedEventArgs e)
+        //{
+        //    string branchName = cmbBranches.SelectedItem.ToString();
+        //    int currentCustomer = CustomerInfo.ChosenCustomer;
+        //    int branchId = 0;
+        //    foreach (var branch in Branch.branches)
+        //    {
+        //        if(branch.branchName == branchName)
+        //        {
+        //            branchId = branch.branchID;
 
-                    using (MySqlConnection connection = new MySqlConnection(connectionString))
-                    {
-                        try
-                        {
-                            connection.Open();
+        //            using (MySqlConnection connection = new MySqlConnection(connectionString))
+        //            {
+        //                try
+        //                {
+        //                    connection.Open();
                             
-                            //Insert into Branch to Customer (branch_cust)
-                            string query = $@"INSERT INTO branch_cust(Cust_ID, Branch_ID)
-                                        VALUES('{currentCustomer}','{branchId}')";
+        //                    //Insert into Branch to Customer (branch_cust)
+        //                    string query = $@"INSERT INTO branch_cust(Cust_ID, Branch_ID)
+        //                                VALUES('{currentCustomer}','{branchId}')";
 
-                            MySqlCommand createCommand = new MySqlCommand(query, connection);
-                            createCommand.ExecuteNonQuery();
-                            connection.Close();
+        //                    MySqlCommand createCommand = new MySqlCommand(query, connection);
+        //                    createCommand.ExecuteNonQuery();
+        //                    connection.Close();
 
-                            BranchToCustomer.branchToCustomers.Add(new BranchToCustomer()
-                            {
-                                lBranchId = branchId,
-                                lCustId = currentCustomer
-                            });
+        //                    DontNeed.branchToCustomers.Add(new DontNeed()
+        //                    {
+        //                        lBranchId = branchId,
+        //                        lCustId = currentCustomer
+        //                    });
 
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
-                    }
-                }
-            }
-        }
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    MessageBox.Show(ex.Message);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
     }
 }
 

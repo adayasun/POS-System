@@ -77,7 +77,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\AddToCart.cs" />
     <Compile Include="Models\Branch.cs" />
-    <Compile Include="Models\BranchToCustomer.cs" />
+    <Compile Include="Models\DontNeed.cs" />
     <Compile Include="Models\BranchToProduct.cs" />
     <Compile Include="Models\CustomerInfo.cs" />
     <Compile Include="Models\ProductList.cs" />

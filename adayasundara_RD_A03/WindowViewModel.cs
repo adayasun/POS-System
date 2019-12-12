@@ -7,6 +7,7 @@
 *	                    This controls the views for each of the window types.
 */
 
+#region System 
 using adayasundara_RD_A03.Utilities;
 using adayasundara_RD_A03.ViewModels;
 using System;
@@ -15,9 +16,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+#endregion System
 
 namespace adayasundara_RD_A03
 {
+    /*
+     * NAME: Window View Model
+     * 
+     * PURPOSE: Controls the Window view and manages the commands for the tabs
+     * 
+     */
+
     public class WindowViewModel : ObservableObject
     {
         //Setup the current view of the model
