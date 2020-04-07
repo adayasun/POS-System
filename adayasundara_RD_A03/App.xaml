@@ -16,5 +16,8 @@
         <DataTemplate DataType="{x:Type vm:ProductViewModel}">
             <view:ProductInfo/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:MetricsViewModel}">
+            <view:Metrics/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

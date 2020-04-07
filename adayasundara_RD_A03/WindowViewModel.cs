@@ -69,6 +69,19 @@ namespace adayasundara_RD_A03
             get { return _productVM; }
             set { OnPropertyChanged(ref _productVM, value); }
         }
+
+        // ------------- Metric Information Page ------------ //
+        //Bound to Load page to button to load the user control
+        public ICommand LoadMetricCommand { get; private set; }
+
+        private MetricsViewModel _metricVM;
+
+        public MetricsViewModel MetricVM
+        {
+            get { return _metricVM; }
+            set { OnPropertyChanged(ref _metricVM, value); }
+        }
+
         // ------------- Window Preparation ----------------//
         /// <summary>
         /// Load a new page for each of the view types
@@ -83,6 +96,14 @@ namespace adayasundara_RD_A03
 
             ProductVM = new ProductViewModel();
             LoadProductCommand = new BoundingCommand(LoadProduct);
+
+            MetricVM = new MetricsViewModel();
+            LoadMetricCommand = new BoundingCommand(LoadMetric);
+        }
+
+        private void LoadMetric()
+        {
+            ThisView = MetricVM;
         }
 
         /// <summary>

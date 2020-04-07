@@ -220,7 +220,7 @@ namespace adayasundara_RD_A03.Views
                 stringFinalPrice = extended.ToString();
 
                 totalPurchaseLine += stringProductName + " (" + stringProdType +") " + stringQuantity + " x $" + stringSPrice + " = $" + stringFinalPrice + "\n";
-                subtotal += price;
+                subtotal += extended;
                 //USING 2
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
